@@ -7,9 +7,41 @@ const getRandomInt = function(min, max) {
 class Monster{
     constructor(stats){
         this.HP = stats.hp;
+        this.MAX_HP = stats.hp;
         this.ATTACK = stats.attack;
         this.WEAKNESS = stats.weakness;
         this.WEAKNESS_AC = stats.weakness_ac;
+        this.AC = stats.atk + 5;
+    }
+
+    toStringStatus(){
+        let status = "making ready";
+
+        if(this.HP < 2){
+            status = "near death";
+        }
+        else if(this.HP <= (this.MAX_HP /2)){
+            status = "bloodied";
+        }
+        else if(this.HP == 0){
+            status = "dead";
+        }
+
+        return `${this.constructor.name} is ${status}.`
+    }
+
+    roll(min, max, type = "hit") {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        let r = Math.floor(Math.random() * (max - min + 1)) + min;
+
+        if(!this[type]){
+            return r;
+        }
+        else{
+            let mod = -(10-this[type]);
+            return r + mod;
+        }
     }
 }
 
