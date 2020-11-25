@@ -99,6 +99,32 @@ class EncounterGenerator{
     static playerExploit(index, type){
         let m = EncounterGenerator.currentMonsters[index];
 
-        
+        let status = ``;
+
+        status += CHARACTER.getActivity() + `\n\n`;
+
+        let multiplier = 0.5;
+        let AC = m.WEAKNESS_AC;
+        if(m.WEAKNESS == type){
+            multiplier = 2;
+        }else{
+            AC += m.roll(1,10);
+        }
+
+        //roll for hit then damage
+        let h = CHARACTER.roll(1,20);
+
+        if(h >= AC){
+            let dmg = CHARACTER.roll(1,20,"ATTACK");
+            dmg *= multiplier;
+            m.HP -= dmg;
+            if(m.HP < 0) m.HP = 0;
+            status += `${CHARACTER.NAME} deals ${dmg} damage. ${m.toStringStatus()}\n\n`;
+        }
+        else{
+            status += `${m.constructor.name} is unimpressed. ${m.toStringStatus()}\n\n`;
+        }
+
+        return status;
     }
 }
